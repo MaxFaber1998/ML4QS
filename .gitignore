@@ -5,3 +5,4 @@ PythonCode/Example_graphs/
 .idea/
 *.iml
 /.idea/
+.DS_Store
