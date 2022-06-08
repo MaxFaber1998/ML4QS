@@ -1,22 +1,10 @@
-from util.util import get_chapter
-
-import matplotlib.colors as cl
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
 import numpy as np
-import pandas as pd
-from pathlib import Path
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.patches as mpatches
-import matplotlib.cm as cm
 from scipy.cluster.hierarchy import dendrogram
 import itertools
-from scipy.optimize import curve_fit
-import re
-import math
 import sys
 from pathlib import Path
-import dateutil
 import matplotlib as mpl
 mpl.use('tkagg')
 

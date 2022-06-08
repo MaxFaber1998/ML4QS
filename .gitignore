@@ -1,3 +1,6 @@
+.cache
+figures
+intermediate_datafiles
 *.pyc
 datasets
 PythonCode/intermediate_datafiles/
