@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as md
 import numpy as np
+import pandas as pd
 from scipy.cluster.hierarchy import dendrogram
 import itertools
 import sys
@@ -43,7 +44,9 @@ class VisualizeDataset:
 
         # Create subplots if more columns are specified.
         if len(columns) > 1:
-            f, xar = plt.subplots(len(columns), sharex=True, sharey=False)
+            f, xar = plt.subplots(len(columns), sharex=True, sharey=False, figsize=(18, 10))
+            plt.rcParams.update({'font.size': 26})
+            plt.tight_layout()
         else:
             f, xar = plt.subplots()
             xar = [xar]
@@ -123,10 +126,22 @@ class VisualizeDataset:
         plt.show()
 
     def plot_dataset_boxplot(self, dataset, cols):
-        plt.Figure(); dataset[cols].plot.box()
-        plt.ylim([-30,30])
+        fig, ax = plt.subplots(figsize=(18, 8))
+        # plt.rcParams.update({'font.size': 140})
+        columns = [dataset[col] for col in cols]
+        ax.boxplot(columns)
+        plt.xticks(list(range(1, len(cols) + 1)), cols, fontsize=14)
+        plt.yticks(fontsize=14)
+        plt.tight_layout()
         self.save(plt)
         plt.show()
+        # plt.Figure()
+        # plt.rcParams.update({'font.size': 14})
+        # dataset[cols].plot.box(figsize=(18, 8))
+        # plt.ylim([-250, 250])
+        # plt.tight_layout()
+        # self.save(plt)
+        # plt.show()
 
     # This function plots the real and imaginary amplitudes of the frequencies found in the Fourier transformation.
     def plot_fourier_amplitudes(self, freq, ampl_real, ampl_imag):

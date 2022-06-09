@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 from Chapter2.CreateDataset import CreateDataset
@@ -19,14 +20,15 @@ def plotSensorData(_base_path: str, _numerical_datasets: list[dict[str, Union[st
                                           value_cols=numerical_dataset['attributes'],
                                           aggregation='avg',
                                           prefix=numerical_dataset['prefix'])
+        df_dataset: pd.DataFrame = dataset.data_table
+
+        DataViz.plot_dataset_boxplot(df_dataset, [_ for _ in df_dataset.columns])
         dataset.add_event_dataset(file='labels.csv',
                                   start_timestamp_col='label_start',
                                   end_timestamp_col='label_end',
                                   value_col='label',
                                   aggregation='binary')
         df_dataset: pd.DataFrame = dataset.data_table
-
-        DataViz.plot_dataset_boxplot(df_dataset, [_ for _ in df_dataset.columns])
         DataViz.plot_dataset(df_dataset,
                              [numerical_dataset['prefix'] for numerical_dataset in _numerical_datasets] + ['label'],
                              ['like' for _ in range(len(_numerical_datasets) + 1)],
@@ -40,6 +42,8 @@ def transformNumDatasets(_base_path: str, _path_metadata: str, _numerical_datase
         export_path: str = f'{_base_path}/Transformed{numerical_dataset["filename"]}'
         start_time_experiment: float = df_metadata[df_metadata['event'] == 'START']['system time'].iloc[0]
 
+        if os.path.isfile(export_path):
+            continue
         df_dataset[numerical_dataset['col_name_time']] = (df_dataset[numerical_dataset['col_name_time']] + start_time_experiment) * 1000 * 1000 * 1000
         df_dataset: pd.DataFrame = df_dataset.rename(columns=dict(zip(numerical_dataset['col_names_numerical'],
                                                                       numerical_dataset['attributes'])))
