@@ -75,9 +75,15 @@ def main():
        
         fs = float(1000)/milliseconds_per_instance
         ws = int(float(10000)/milliseconds_per_instance)
-        dataset = FreqAbs.abstract_frequency(dataset, ['acc_phone_x'], ws, fs)
-        # Spectral analysis.
-        DataViz.plot_dataset(dataset, ['acc_phone_x_max_freq', 'acc_phone_x_freq_weighted', 'acc_phone_x_pse', 'label'], ['like', 'like', 'like', 'like'], ['line', 'line', 'line','points'])
+        dataset_copy = dataset.copy(deep=True)
+
+        for col in dataset_copy.columns:
+            dataset = FreqAbs.abstract_frequency(dataset, [col], ws, fs)
+            # Spectral analysis.
+            DataViz.plot_dataset(dataset,
+                                 [f'{col}_max_freq', f'{col}_freq_weighted', f'{col}_pse', 'label'],
+                                 ['like', 'like', 'like', 'like'],
+                                 ['line', 'line', 'line', 'points'])
         print("--- %s seconds ---" % (time.time() - start_time))
   
     if FLAGS.mode == 'final':
