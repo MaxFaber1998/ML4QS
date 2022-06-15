@@ -33,6 +33,11 @@ def plotSensorData(_base_path: str, _numerical_datasets: list[dict[str, Union[st
                              [numerical_dataset['prefix'] for numerical_dataset in _numerical_datasets] + ['label'],
                              ['like' for _ in range(len(_numerical_datasets) + 1)],
                              ['line' for _ in range(len(_numerical_datasets))] + ['points'])
+    chapter2_result_path: str = f'{_base_path}/chapter2_result.csv'
+
+    if not os.path.isfile(chapter2_result_path):
+        # Finally, store the last dataset we generated (250 ms).
+        df_dataset.to_csv(Path(chapter2_result_path))
 
 def transformNumDatasets(_base_path: str, _path_metadata: str, _numerical_datasets: list[dict[str, Union[str, list[str]]]]) -> None:
     df_metadata: pd.DataFrame = pd.read_csv(_path_metadata)
