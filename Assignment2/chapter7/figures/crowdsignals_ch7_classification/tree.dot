@@ -1,0 +1,20 @@
+digraph Tree {
+node [shape=box] ;
+0 [label="mag_z_max_freq <= 0.0\nentropy = 1.584\nsamples = 618\nvalue = [212, 197, 209]\nclass = labelJumping"] ;
+1 [label="entropy = 0.0\nsamples = 197\nvalue = [0, 197, 0]\nclass = labelOnTable"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label="acc_x_temp_mean_ws_30 <= -0.251\nentropy = 1.0\nsamples = 421\nvalue = [212, 0, 209]\nclass = labelJumping"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="entropy = 0.0\nsamples = 199\nvalue = [199, 0, 0]\nclass = labelJumping"] ;
+2 -> 3 ;
+4 [label="acc_x_temp_mean_ws_30 <= -0.135\nentropy = 0.322\nsamples = 222\nvalue = [13, 0, 209]\nclass = labelWalking"] ;
+2 -> 4 ;
+5 [label="gyr_x_temp_std_ws_30 <= 0.377\nentropy = 0.974\nsamples = 32\nvalue = [13, 0, 19]\nclass = labelWalking"] ;
+4 -> 5 ;
+6 [label="entropy = 0.0\nsamples = 19\nvalue = [0, 0, 19]\nclass = labelWalking"] ;
+5 -> 6 ;
+7 [label="entropy = 0.0\nsamples = 13\nvalue = [13, 0, 0]\nclass = labelJumping"] ;
+5 -> 7 ;
+8 [label="entropy = 0.0\nsamples = 190\nvalue = [0, 0, 190]\nclass = labelWalking"] ;
+4 -> 8 ;
+}
