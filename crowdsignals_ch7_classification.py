@@ -14,8 +14,8 @@ start = time.time()
 
 from Chapter7.PrepareDatasetForLearning import PrepareDatasetForLearning
 from Chapter7.LearningAlgorithms import ClassificationAlgorithms
-from Chapter7 import ClassificationEvaluation
-from Chapter7 import FeatureSelectionClassification
+from Chapter7.Evaluation import ClassificationEvaluation
+from Chapter7.FeatureSelection import FeatureSelectionClassification
 from util import util
 from util.VisualizeDataset import VisualizeDataset
 
