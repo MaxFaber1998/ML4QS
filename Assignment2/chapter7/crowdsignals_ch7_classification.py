@@ -87,9 +87,9 @@ DataViz.plot_xy(x=[range(1, N_FORWARD_SELECTION+1)], y=[ordered_scores],
 
 # based on python2 features, slightly different.
 print(f'COLS: {list(dataset.columns)}')
-selected_features = ['acc_y_freq_0.0_Hz_ws_10', 'acc_x_temp_mean_ws_30', 'gyr_x_temp_std_ws_30',
-                     'mag_y_pse', 'mag_z_max_freq', 'gyr_y_freq_weighted', 'gyr_y_freq_1.0_Hz_ws_10',
-                     'acc_x_freq_1.0_Hz_ws_10', 'gyr_y_freq_5.0_Hz_ws_10', 'mag_z_freq_0.0_Hz_ws_10']
+selected_features = ['acc_y_freq_0.0_Hz_ws_100', 'acc_x_temp_mean_ws_300', 'gyr_x_temp_std_ws_300',
+                     'mag_y_pse', 'mag_z_max_freq', 'gyr_y_freq_weighted', 'gyr_y_freq_1.0_Hz_ws_100',
+                     'acc_x_freq_1.0_Hz_ws_100', 'gyr_y_freq_5.0_Hz_ws_100', 'mag_z_freq_0.0_Hz_ws_100']
 
 # selected_features = ['acc_phone_y_freq_0.0_Hz_ws_40', 'press_phone_pressure_temp_mean_ws_120', 'gyr_phone_x_temp_std_ws_120',
 #                      'mag_watch_y_pse', 'mag_phone_z_max_freq', 'gyr_watch_y_freq_weighted', 'gyr_phone_y_freq_1.0_Hz_ws_40',

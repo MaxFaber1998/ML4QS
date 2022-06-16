@@ -89,9 +89,9 @@ class PrepareDatasetForLearning:
         train_y = copy.deepcopy(training_instances[target])
         test_y = copy.deepcopy(test_instances[target])
         train_X = training_instances
-        del train_X[target]
+        train_X = train_X.drop(columns=target)
         test_X = test_instances
-        del test_X[target]
+        test_X = test_X.drop(columns=target)
         return train_X, test_X, train_y, test_y
 
 
