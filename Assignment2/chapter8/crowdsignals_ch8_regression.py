@@ -48,6 +48,9 @@ train_X, test_X, train_y, test_y = prepare.split_single_dataset_regression_by_ti
                                                                                    '2022-06-16 09:52:20',
                                                                                    '2022-06-16 10:07:22',
                                                                                    '2022-06-16 10:17:20')
+# Fix for crash at Chapter8/LearningAlgorithmsTemporal.py, line 601, in time_series
+train_y.name = 'acc_xyz'
+test_y.name = 'acc_xyz'
 
 print('Training set length is: ', len(train_X.index))
 print('Test set length is: ', len(test_X.index))
