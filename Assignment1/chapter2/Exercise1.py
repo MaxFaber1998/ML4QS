@@ -5,10 +5,11 @@ from Chapter2.CreateDataset import CreateDataset
 from util.VisualizeDataset import VisualizeDataset
 from definitions import ROOT_DIR
 from pathlib import Path
-from typing import Union
+from typing import Union, List, Dict
 
-def plotSensorData(_base_path: str, _numerical_datasets: list[dict[str, Union[str, list[str]]]]) -> None:
-    GRANULARITY: list[int] = [1000, 100]
+
+def plotSensorData(_base_path: str, _numerical_datasets: List[Dict[str, Union[str, List[str]]]]) -> None:
+    GRANULARITY: List[int] = [1000, 250]
     DataViz: VisualizeDataset = VisualizeDataset(__file__)
 
     for milliseconds_per_instance in GRANULARITY:
@@ -21,6 +22,11 @@ def plotSensorData(_base_path: str, _numerical_datasets: list[dict[str, Union[st
                                           aggregation='avg',
                                           prefix=numerical_dataset['prefix'])
         df_dataset: pd.DataFrame = dataset.data_table
+
+        df_dataset_annotate: pd.DataFrame = df_dataset.copy(deep=True) # For annotation purposes
+        df_dataset_annotate.insert(0, 'duration_sec', (df_dataset_annotate.index - df_dataset_annotate.index[0]).astype('timedelta64[s]') % 60)
+        df_dataset_annotate.insert(0, 'duration_min', (df_dataset_annotate.index - df_dataset_annotate.index[0]).astype('timedelta64[m]'))
+        df_dataset_annotate.insert(0, 'timestamp', df_dataset_annotate.index.values.astype(int))
 
         DataViz.plot_dataset_boxplot(df_dataset, [_ for _ in df_dataset.columns])
         dataset.add_event_dataset(file='labels.csv',
@@ -39,7 +45,7 @@ def plotSensorData(_base_path: str, _numerical_datasets: list[dict[str, Union[st
         # Finally, store the last dataset we generated (250 ms).
         df_dataset.to_csv(Path(chapter2_result_path))
 
-def transformNumDatasets(_base_path: str, _path_metadata: str, _numerical_datasets: list[dict[str, Union[str, list[str]]]]) -> None:
+def transformNumDatasets(_base_path: str, _path_metadata: str, _numerical_datasets: List[Dict[str, Union[str, List[str]]]]) -> None:
     df_metadata: pd.DataFrame = pd.read_csv(_path_metadata)
 
     for numerical_dataset in _numerical_datasets:
@@ -56,9 +62,9 @@ def transformNumDatasets(_base_path: str, _path_metadata: str, _numerical_datase
 
 if __name__ == '__main__':
     base_path: str = f'{ROOT_DIR}/phyphox_exports'
-    attributes: list[str] = ['x', 'y', 'z']
+    attributes: List[str] = ['x', 'y', 'z']
     col_name_time: str = 'Time (s)'
-    numerical_datasets: list[dict[str, Union[str, list[str]]]] = [
+    numerical_datasets: List[Dict[str, Union[str, List[str]]]] = [
         {
             'filename': 'Accelerometer.csv',
             'prefix': 'acc_',
