@@ -90,7 +90,7 @@ def main():
     if FLAGS.mode == 'final':
         
 
-        ws = int(float(0.5*6000)/milliseconds_per_instance)
+        ws = int(float(0.5*60000)/milliseconds_per_instance)
         fs = float(1000)/milliseconds_per_instance
 
         selected_predictor_cols = [c for c in dataset.columns if not 'label' in c]
@@ -104,7 +104,7 @@ def main():
      
         CatAbs = CategoricalAbstraction()
         
-        dataset = CatAbs.abstract_categorical(dataset, ['label'], ['like'], 0.03, int(float(5*6000)/milliseconds_per_instance), 2)
+        dataset = CatAbs.abstract_categorical(dataset, ['label'], ['like'], 0.03, int(float(5*60000)/milliseconds_per_instance), 2)
 
 
         periodic_predictor_cols = ['acc_x' ,'acc_y','acc_z', 'gyr_x','gyr_y', 'gyr_z',
@@ -112,7 +112,7 @@ def main():
 
 
         
-        dataset = FreqAbs.abstract_frequency(copy.deepcopy(dataset), periodic_predictor_cols, int(float(1000)/milliseconds_per_instance), fs)
+        dataset = FreqAbs.abstract_frequency(copy.deepcopy(dataset), periodic_predictor_cols, int(float(10000)/milliseconds_per_instance), fs)
 
 
         # Now we only take a certain percentage of overlap in the windows, otherwise our training examples will be too much alike.
