@@ -35,6 +35,7 @@ except IOError as e:
     raise e
 
 dataset.index = pd.to_datetime(dataset.index)
+labels_before = dataset[[_ for _ in dataset.columns if 'label' in _]]
 
 # Let us create our visualization class again.
 DataViz = VisualizeDataset(__file__)
@@ -46,8 +47,8 @@ DataViz = VisualizeDataset(__file__)
 # cases where we do not know the label.
 
 prepare = PrepareDatasetForLearning()
-
-train_X, test_X, train_y, test_y = prepare.split_single_dataset_classification(dataset, ['label'], 'like', 0.7, filter=True, temporal=False)
+dataset = dataset.dropna()
+train_X, test_X, train_y, test_y = prepare.split_single_dataset_classification(dataset, ['label'], 'like', 0.7, filter=False, temporal=False)
 
 print('Training set length is: ', len(train_X.index))
 print('Test set length is: ', len(test_X.index))

@@ -14,8 +14,8 @@ from util import util
 from util.VisualizeDataset import VisualizeDataset
 from Chapter7.PrepareDatasetForLearning import PrepareDatasetForLearning
 from Chapter7.LearningAlgorithms import RegressionAlgorithms
-from Chapter7 import RegressionEvaluation
-from Chapter7 import FeatureSelectionRegression
+# from Chapter7 import RegressionEvaluation
+# from Chapter7 import FeatureSelectionRegression
 
 # Of course we repeat some stuff from Chapter 3, namely to load the dataset
 
