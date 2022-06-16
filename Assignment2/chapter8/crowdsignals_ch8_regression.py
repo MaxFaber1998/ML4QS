@@ -39,18 +39,16 @@ except IOError as e:
     raise e
 
 dataset.index = pd.to_datetime(dataset.index)
+dataset = dataset.dropna()
 
 # Let us consider our second task, namely the prediction of the heart rate. We consider this as a temporal task.
 
 prepare = PrepareDatasetForLearning()
 train_X, test_X, train_y, test_y = prepare.split_single_dataset_regression_by_time(dataset,
-                                                                                   ['acc_x', 'acc_y', 'acc_z'],
+                                                                                   'acc_x',
                                                                                    '2022-06-16 09:52:20',
                                                                                    '2022-06-16 10:07:22',
                                                                                    '2022-06-16 10:17:20')
-# Fix for crash at Chapter8/LearningAlgorithmsTemporal.py, line 601, in time_series
-train_y.name = 'acc_xyz'
-test_y.name = 'acc_xyz'
 
 print('Training set length is: ', len(train_X.index))
 print('Test set length is: ', len(test_X.index))
@@ -87,9 +85,9 @@ feature_names = ['initial set', 'Chapter 3', 'Chapter 4', 'Chapter 5', 'Selected
 
 # Let us first study whether the time series is stationary and what the autocorrelations are.
 
-# dftest = adfuller(dataset[['acc_x', 'acc_y', 'acc_z']], autolag='AIC')
+# dftest = adfuller(dataset['acc_x'], autolag='AIC')
 
-plt.Figure(); autocorrelation_plot(dataset[['acc_x', 'acc_y', 'acc_z']])
+plt.Figure(); autocorrelation_plot(dataset['acc_x'])
 DataViz.save(plt)
 plt.show()
 
@@ -183,15 +181,15 @@ for i in range(0, len(possible_feature_sets)):
 DataViz.plot_performances_regression(['Reservoir', 'RNN', 'Time series'], feature_names, scores_over_all_algs)
 
 regr_train_y, regr_test_y = learner.reservoir_computing(train_X[features_after_chapter_5], train_y, test_X[features_after_chapter_5], test_y, gridsearch=False)
-DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y, regr_train_y[['acc_x', 'acc_y', 'acc_z']], test_X.index, test_y, regr_test_y[['acc_x', 'acc_y', 'acc_z']], 'accelerometer')
+DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y, regr_train_y['acc_x'], test_X.index, test_y, regr_test_y['acc_x'], 'accelerometer')
 regr_train_y, regr_test_y = learner.recurrent_neural_network(train_X[basic_features], train_y, test_X[basic_features], test_y, gridsearch=True)
-DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y, regr_train_y[['acc_x', 'acc_y', 'acc_z']], test_X.index, test_y, regr_test_y[['acc_x', 'acc_y', 'acc_z']], 'accelerometer')
+DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y, regr_train_y['acc_x'], test_X.index, test_y, regr_test_y['acc_x'], 'accelerometer')
 regr_train_y, regr_test_y = learner.time_series(train_X[basic_features], train_y, test_X[basic_features], test_y, gridsearch=True)
-DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y, regr_train_y[['acc_x', 'acc_y', 'acc_z']], test_X.index, test_y, regr_test_y[['acc_x', 'acc_y', 'acc_z']], 'accelerometer')
+DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y, regr_train_y['acc_x'], test_X.index, test_y, regr_test_y['acc_x'], 'accelerometer')
 
 # And now some example code for using the dynamical systems model with parameter tuning (note: focus on predicting accelerometer data):
 
-# train_X, test_X, train_y, test_y = prepare.split_single_dataset_regression(copy.deepcopy(dataset), ['acc_x', 'acc_y', 'acc_z'], 0.9, filter=False, temporal=True)
+# train_X, test_X, train_y, test_y = prepare.split_single_dataset_regression(copy.deepcopy(dataset), 'acc_x', 0.9, filter=False, temporal=True)
 #
 # output_sets = learner.dynamical_systems_model_nsga_2(train_X, train_y, test_X, test_y, ['self.acc_x', 'self.acc_y', 'self.acc_z'],
 #                                                      ['self.a * self.acc_x + self.b * self.acc_y', 'self.c * self.acc_y + self.d * self.acc_z'],
