@@ -30,17 +30,23 @@ except IOError as e:
 prepare = PrepareDatasetForLearning()
 
 learner = TemporalRegressionAlgorithms()
-
-train_X, test_X, train_y, test_y = prepare.split_single_dataset_regression(copy.deepcopy(dataset), ['hr_watch_rate'], 0.9, filter=False, temporal=True)
+dataset.index = pd.to_datetime(dataset.index)
+train_X, test_X, train_y, test_y = prepare.split_single_dataset_regression(copy.deepcopy(dataset), ['hr_watch_rate', 'acc_phone_x'], 0.9, filter=False, temporal=True)
 # train_X, test_X, train_y, test_y = prepare.split_single_dataset_regression(copy.deepcopy(dataset), ['acc_phone_x', 'acc_phone_y'], 0.9, filter=False, temporal=True)
 
-output_sets = learner.dynamical_systems_model_nsga_2(train_X, train_y, test_X, test_y, ['self.hr_watch_rate'],
-                                                     ['self.a * self.hr_watch_rate + self.b * self.hr_watch_rate'],
-                                                     ['self.hr_watch_rate'],
-                                                     ['self.a', 'self.b', 'self.c', 'self.d', 'self.e', 'self.f'],
+output_sets = learner.dynamical_systems_model_nsga_2(train_X, train_y, test_X, test_y,
+                                                     ['self.hr_watch_rate', 'self.acc_phone_x', 'self.acc_phone_y', 'self.acc_phone_z'],
+                                                     [
+                                                        'self.a * self.hr_watch_rate + self.b * self.hr_watch_rate',
+                                                        'self.c * self.acc_phone_x + self.d * self.acc_phone_x',
+                                                        'self.e * self.hr_watch_rate + self.f * self.acc_phone_y',
+                                                        'self.g * self.acc_phone_x + self.h * self.acc_phone_z'
+                                                     ],
+                                                     ['self.hr_watch_rate', 'self.acc_phone_x'],
+                                                     ['self.a', 'self.b', 'self.c', 'self.d', 'self.e', 'self.f', 'self.g', 'self.h'],
                                                      pop_size=10, max_generations=10, per_time_step=True)
 # output_sets = learner.dynamical_systems_model_nsga_2(train_X, train_y, test_X, test_y, ['self.acc_phone_x', 'self.acc_phone_y', 'self.acc_phone_z'],
-#                                                      ['self.a * self.acc_phone_x + self.b * self.acc_phone_y', 'self.c * self.acc_phone_y + self.d * self.acc_phone_z', 'self.e * self.acc_phone_x + self.f * self.acc_phone_z'],
+#                                                       ['self.a * self.acc_phone_x + self.b * self.acc_phone_y', 'self.c * self.acc_phone_y + self.d * self.acc_phone_z', 'self.e * self.acc_phone_x + self.f * self.acc_phone_z'],
 #                                                      ['self.acc_phone_x', 'self.acc_phone_y'],
 #                                                      ['self.a', 'self.b', 'self.c', 'self.d', 'self.e', 'self.f'],
 #                                                      pop_size=10, max_generations=10, per_time_step=True)
@@ -49,11 +55,17 @@ DataViz.plot_pareto_front(output_sets)
 DataViz.plot_numerical_prediction_versus_real_dynsys_mo(train_X.index, train_y, test_X.index, test_y, output_sets, 0, 'hr_watch_rate')
 # DataViz.plot_numerical_prediction_versus_real_dynsys_mo(train_X.index, train_y, test_X.index, test_y, output_sets, 0, 'acc_phone_x')
 
-regr_train_y, regr_test_y = learner.dynamical_systems_model_ga(train_X, train_y, test_X, test_y, ['self.hr_watch_rate'],
-                                                     ['self.a * self.hr_watch_rate + self.b * self.hr_watch_rate'],
-                                                     ['self.hr_watch_rate'],
-                                                     ['self.a', 'self.b', 'self.c', 'self.d', 'self.e', 'self.f'],
-                                                     pop_size=5, max_generations=10, per_time_step=True)
+regr_train_y, regr_test_y = learner.dynamical_systems_model_ga(train_X, train_y, test_X, test_y,
+                                                               ['self.hr_watch_rate', 'self.acc_phone_x', 'self.acc_phone_y', 'self.acc_phone_z'],
+                                                               [
+                                                                   'self.a * self.hr_watch_rate + self.b * self.hr_watch_rate',
+                                                                   'self.c * self.acc_phone_x + self.d * self.acc_phone_x',
+                                                                   'self.e * self.hr_watch_rate + self.f * self.acc_phone_y',
+                                                                   'self.g * self.acc_phone_x + self.h * self.acc_phone_z'
+                                                               ],
+                                                               ['self.hr_watch_rate', 'self.acc_phone_x'],
+                                                               ['self.a', 'self.b', 'self.c', 'self.d', 'self.e', 'self.f', 'self.g', 'self.h'],
+                                                               pop_size=5, max_generations=10, per_time_step=True)
 # regr_train_y, regr_test_y = learner.dynamical_systems_model_ga(train_X, train_y, test_X, test_y, ['self.acc_phone_x', 'self.acc_phone_y', 'self.acc_phone_z'],
 #                                                      ['self.a * self.acc_phone_x + self.b * self.acc_phone_y', 'self.c * self.acc_phone_y + self.d * self.acc_phone_z', 'self.e * self.acc_phone_x + self.f * self.acc_phone_z'],
 #                                                      ['self.acc_phone_x', 'self.acc_phone_y'],
@@ -63,11 +75,17 @@ regr_train_y, regr_test_y = learner.dynamical_systems_model_ga(train_X, train_y,
 DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y['hr_watch_rate'], regr_train_y['hr_watch_rate'], test_X.index, test_y['hr_watch_rate'], regr_test_y['hr_watch_rate'], 'hr_watch_rate')
 # DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y['acc_phone_x'], regr_train_y['acc_phone_x'], test_X.index, test_y['acc_phone_x'], regr_test_y['acc_phone_x'], 'acc_phone_x')
 
-regr_train_y, regr_test_y = learner.dynamical_systems_model_sa(train_X, train_y, test_X, test_y, ['self.hr_watch_rate'],
-                                                     ['self.a * self.hr_watch_rate + self.b * self.hr_watch_rate'],
-                                                     ['self.hr_watch_rate'],
-                                                     ['self.a', 'self.b', 'self.c', 'self.d', 'self.e', 'self.f'],
-                                                     max_generations=10, per_time_step=True)
+regr_train_y, regr_test_y = learner.dynamical_systems_model_sa(train_X, train_y, test_X, test_y,
+                                                               ['self.hr_watch_rate', 'self.acc_phone_x', 'self.acc_phone_y', 'self.acc_phone_z'],
+                                                               [
+                                                                   'self.a * self.hr_watch_rate + self.b * self.hr_watch_rate',
+                                                                   'self.c * self.acc_phone_x + self.d * self.acc_phone_x',
+                                                                   'self.e * self.hr_watch_rate + self.f * self.acc_phone_y',
+                                                                   'self.g * self.acc_phone_x + self.h * self.acc_phone_z'
+                                                               ],
+                                                               ['self.hr_watch_rate', 'self.acc_phone_x'],
+                                                               ['self.a', 'self.b', 'self.c', 'self.d', 'self.e', 'self.f', 'self.g', 'self.h'],
+                                                               max_generations=10, per_time_step=True)
 # regr_train_y, regr_test_y = learner.dynamical_systems_model_sa(train_X, train_y, test_X, test_y, ['self.acc_phone_x', 'self.acc_phone_y', 'self.acc_phone_z'],
 #                                                      ['self.a * self.acc_phone_x + self.b * self.acc_phone_y', 'self.c * self.acc_phone_y + self.d * self.acc_phone_z', 'self.e * self.acc_phone_x + self.f * self.acc_phone_z'],
 #                                                      ['self.acc_phone_x', 'self.acc_phone_y'],
